@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Analysis</title>
+</head>
+<body>
+    <h1>Food Analysis</h1>
+    
+    <!-- Form to upload an image -->
+    <form method="POST" enctype="multipart/form-data">
+        <label for="file">Upload an image:</label>
+        <input type="file" name="file" id="file" required>
+        <button type="submit">Upload</button>
+    </form>
+    
+    {% if img_src %}
+    <h2>Uploaded Image:</h2>
+    <img src="{{ img_src }}" alt="Uploaded Image" width="300">
+    {% endif %}
+
+    {% if dish_name %}
+    <h2>Dish Name:</h2>
+    <p>{{ dish_name }}</p>
+
+    <h2>Description:</h2>
+    <p>{{ description }}</p>
+
+    <h2>Macronutrients:</h2>
+    <ul>
+        {% for item in nutrition_info %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Portion Estimate:</h2>
+    <p>{{ portion_estimate }}</p>
+    {% endif %}
+    
+</body>
+</html>

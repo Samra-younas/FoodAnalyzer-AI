@@ -1,0 +1,473 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Analyzer - Claude AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+
+        .upload-section {
+            background: #f8f9fa;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #764ba2;
+            background: #f0f0ff;
+        }
+
+        .upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .upload-label:hover {
+            transform: scale(1.05);
+        }
+
+        .upload-info {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .results {
+            margin-top: 40px;
+        }
+
+        .image-preview {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .dish-name {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .nutrition-item {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1em;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .portion-estimate {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .error-message {
+            background: #ff6b6b;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .nutrition-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ Nutrition Analyzer</h1>
+        <p class="subtitle">Powered by Claude AI</p>
+
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-section">
+                <label for="file-input" class="upload-label">
+                    📷 Choose Food Image
+                </label>
+                <input type="file" id="file-input" name="file" accept="image/*" required>
+                <p class="upload-info">Upload a photo of your food or drink</p>
+                <p class="file-name" id="file-name"></p>
+            </div>
+            <button type="submit" class="submit-btn" id="submit-btn">
+                🔍 Analyze Nutrition
+            </button>
+        </form>
+
+        {% if img_src %}
+        <div class="results">
+            <div class="image-preview">
+                <img src="{{ img_src }}" alt="Uploaded food image">
+            </div>
+
+            {% if dish_name %}
+                {% if dish_name == "Unknown Dish" or description == "Please Retake Picture" %}
+                    <div class="error-message">
+                        ⚠️ Please Retake Picture
+                        <p style="font-size: 0.9em; margin-top: 10px;">
+                            The image is unclear. Please take a clearer photo.
+                        </p>
+                    </div>
+                {% else %}
+                    <div class="dish-name">
+                        {{ dish_name }}
+                    </div>
+
+                    {% if description %}
+                    <div class="description">
+                        <strong>Description:</strong> {{ description }}
+                    </div>
+                    {% endif %}
+
+                    {% if nutrition_info %}
+                    <div class="nutrition-grid">
+                        {% for item in nutrition_info %}
+                        <div class="nutrition-item">
+                            {{ item }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if portion_estimate %}
+                    <div class="portion-estimate">
+                        📊 {{ portion_estimate }}
+                    </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Show selected file name
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            const fileNameDisplay = document.getElementById('file-name');
+            if (fileName) {
+                fileNameDisplay.textContent = '✓ Selected: ' + fileName;
+            } else {
+                fileNameDisplay.textContent = '';
+            }
+        });
+
+        // Show loading state on form submit
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.textContent = '⏳ Analyzing...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Analyzer - Claude AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        input[type="file"] {
+            margin-bottom: 15px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .dish-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+        
+        .description {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .nutrition-info {
+            background-color: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .nutrition-info p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+        
+        .portion-estimate {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Upload Image for Nutrition Analysis</h1>
+
+<form action="/" method="POST" enctype="multipart/form-data">
+    <label for="file">Choose a food image:</label>
+    <input type="file" name="file" id="file" accept="image/*" required>
+    <button type="submit">Analyze Nutrition</button>
+</form>
+
+{% if img_src %}
+<div class="results">
+    <h2>Uploaded Image:</h2>
+    <img src="{{ img_src }}" alt="Uploaded Image">
+    
+    {% if dish_name %}
+        {% if dish_name == "Unknown Dish" or description == "Please Retake Picture" %}
+            <div class="error">
+                ⚠️ Please Retake Picture - The image is unclear. Please take a clearer photo.
+            </div>
+        {% else %}
+            <div class="dish-name">
+                 {{ dish_name }}
+            </div>
+            
+            {% if description %}
+            <div class="description">
+                <strong>Description:</strong><br>
+                {{ description }}
+            </div>
+            {% endif %}
+            
+            {% if nutrition_info %}
+            <div class="nutrition-info">
+                <strong>Nutritional Information:</strong><br>
+                {% for item in nutrition_info %}
+                    <p>{{ item }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if portion_estimate %}
+            <div class="portion-estimate">
+                📊 Portion Estimate:<br>
+                {{ portion_estimate }}
+            </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nutrition Analyzer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+      padding: 25px;
+      max-width: 500px;
+      width: 100%;
+    }
+    .card h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .preview img {
+      border-radius: 10px;
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      background: #f0f2f5;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .description {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #444;
+    }
+    button {
+      margin-top: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .portion-estimate {
+      margin-top: 15px; /* separate from nutrition list */
+      font-weight: bold;
+      color: #333; 
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🍎 Nutrition Analyzer</h2>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" required>
+      <button type="submit">Analyze</button>
+    </form>
+
+    {% if img_src %}
+      <div class="preview">
+        <h3>Uploaded Image:</h3>
+        <img src="{{ img_src }}" alt="Uploaded Image">
+      </div>
+    {% endif %}
+
+    {% if description %}
+      <p class="description">{{ description }}</p>
+    {% endif %}
+
+    {% if nutrition_info %}
+      <h3>Macronutrient Breakdown:</h3>
+      <ul>
+        {% for item in nutrition_info %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if portion_estimate %}
+      <p class="portion-estimate">{{ portion_estimate }}</p>
+    {% endif %}
+  </div>
+</body>
+
+
+
+<script type="text/javascript">
+   // Disable the file input button when the image is being processed
+   function disableFileInput() {
+       document.getElementById("file-input").disabled = true;
+   }
+
+   // Enable the file input button after the image has been processed
+   function enableFileInput() {
+       document.getElementById("file-input").disabled = false;
+   }
+</script>
+</html>  -->
+<!-- 
+
+
+
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nutrition Analyzer</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f4f6f8;display:flex;justify-content:center;padding:40px}
+    .card{background:#fff;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1);padding:25px;max-width:550px;width:100%}
+    .card h2{margin-bottom:15px;color:#333}
+    .preview img{border-radius:10px;max-width:100%;margin-bottom:20px}
+    ul{list-style:none;padding:0}
+    ul li{background:#f0f2f5;padding:10px;border-radius:8px;margin-bottom:8px;font-size:15px}
+    .description{font-size:16px;margin-bottom:15px;color:#444}
+    button{margin-top:10px;background:#4CAF50;color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer}
+    button:hover{background:#45a049}
+    .portion-estimate{margin-top:15px;font-weight:bold;color:#333}
+    .section-title{margin:16px 0 8px 0;color:#222}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🍎 Nutrition Analyzer</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" required />
+      <button type="submit">Analyze</button>
+    </form>
+
+    {% if img_src %}
+      <div class="preview">
+        <h3 class="section-title">Uploaded Image</h3>
+        <img src="{{ img_src }}" alt="Uploaded Image" />
+      </div>
+    {% endif %}
+
+    {% if dish_name %}
+      <h3 class="section-title">Dish</h3>
+      <p>{{ dish_name }}</p>
+    {% endif %}
+
+    {% if description %}
+      <h3 class="section-title">Description</h3>
+      <p class="description">{{ description }}</p>
+    {% endif %}
+
+    {% if nutrition_info %}
+      <h3 class="section-title">Macronutrient Breakdown</h3>
+      <ul>
+        {% for item in nutrition_info %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if portion_estimate %}
+      <h3 class="section-title">Portion & Calories</h3>
+      <p class="portion-estimate">{{ portion_estimate }}</p>
+    {% endif %}
+  </div>
+</body>
+</html>
